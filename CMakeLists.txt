@@ -4,7 +4,7 @@ project(Dragon)
 set(CMAKE_CXX_STANDARD 20)
 
 find_package(
-        Boost 1.87.0
+        Boost 1.88.0
         COMPONENTS
         json
         coroutine
