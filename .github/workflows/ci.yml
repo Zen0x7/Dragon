@@ -1,0 +1,31 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+    name: Build
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Boost
+        uses: MarkusJx/install-boost@v2.5.0
+        with:
+          boost_version: 1.88.0
+          platform_version: 24.04
+          toolset: gcc
+          arch: x64
+
+      - name: Set up CMake
+        uses: lukka/get-cmake@latest
+
+      - name: Configure
+        run: |
+          cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DBOOST_ROOT=$BOOST_ROOT
+
+      - name: Build
+        run: cmake --build build --config Release
