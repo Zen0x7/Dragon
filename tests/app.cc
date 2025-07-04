@@ -12,29 +12,12 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-#ifndef DRAGON_APP_HPP
-#define DRAGON_APP_HPP
+#include <gtest/gtest.h>
 
-#include <string>
+#include <dragon/app.hpp>
 
-namespace dragon {
-    /**
-     * Serve
-     *
-     * @param argc
-     * @param argv
-     * @return
-     */
-    int serve(int argc, char* argv[]);
 
-    /**
-     * Version
-     *
-     * @return
-     */
-    inline std::string version() {
-        return "1.0.0";
-    }
+TEST(Dragon, Version)
+{
+    ASSERT_EQ(dragon::version(), "1.0.0");
 }
-
-#endif  // DRAGON_APP_HPP

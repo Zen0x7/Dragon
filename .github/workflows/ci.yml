@@ -2,11 +2,17 @@ name: CI
 
 on: [push]
 
+
+
 jobs:
   build:
     name: Build
 
     runs-on: ubuntu-22.04-arm
+
+    strategy:
+      matrix:
+        type: [Debug, Release]
 
     steps:
       - name: Checkout repository
@@ -26,9 +32,21 @@ jobs:
 
       - name: Configure
         run: |
-          cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DBOOST_ROOT=$BOOST_ROOT
+          cmake -B build -S . -DCMAKE_BUILD_TYPE=${{ matrix.type }} -DBOOST_ROOT=$BOOST_ROOT -DBUILD_TESTS=${{ matrix.type == 'Debug' && 'ON' || 'OFF' }}
         env:
           BOOST_ROOT: ${{ steps.install-boost.outputs.BOOST_ROOT }}
 
       - name: Build
-        run: cmake --build build --config Release
+        run: cmake --build build --config ${{ matrix.type }}
+
+      - name: Test
+        if: ${{ matrix.type == 'Debug' }}
+        run: |
+          ctest --test-dir build --output-on-failure --verbose
+          gcovr --filter='src/' --print-summary --sort-percentage
+
+      - name: Upload coverage reports to Codecov
+        if: ${{ matrix.type == 'Debug' }}
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
