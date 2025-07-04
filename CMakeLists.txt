@@ -42,7 +42,7 @@ if (BUILD_TESTS)
 
     add_executable(tests ${TESTS})
 
-    target_link_libraries(tests GTest::gtest_main dragon_core)
+    target_link_libraries(tests GTest::gtest_main dragon_core ${Boost_LIBRARIES})
     include(GoogleTest)
     gtest_discover_tests(tests)
 endif ()
