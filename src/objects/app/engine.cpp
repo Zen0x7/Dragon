@@ -14,12 +14,40 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 #include <app/engine.hpp>
+
 #include <boost/core/ignore_unused.hpp>
+
+// #include <boost/beast/http/verb.hpp>
+
+// #include <dragon/handlers/bad_request.hpp>
+// #include <dragon/handlers/not_found.hpp>
 
 namespace app {
 void engine::bootstrap(const std::shared_ptr<dragon::app>& app) {
   // Bootstrap your application
 
   boost::ignore_unused(app);  // Remove this when app becomes usable.
+
+  // Configure
+  // app->config_->set_read_timeout(50);
+  // app->config_->set_debug(true);
+
+  // Register routes
+  // app->router_->bind(
+  //     boost::beast::http::verb::get, "/welcome",
+  //     [](const boost::beast::http::request<boost::beast::http::string_body>&
+  //            request,
+  //        const std::unordered_map<std::string, std::string>& params) {
+  //       return dragon::handlers::not_found(request);
+  //     });
+
+  // app->router_->bind(
+  //     boost::beast::http::verb::get, "/welcome/{param}",
+  //     [](const boost::beast::http::request<boost::beast::http::string_body>&
+  //            request,
+  //        const std::unordered_map<std::string, std::string>& params) {
+  //       std::cout << params.at("param") << std::endl;
+  //       return dragon::handlers::not_found(request);
+  //     });
 }
 }  // namespace app
