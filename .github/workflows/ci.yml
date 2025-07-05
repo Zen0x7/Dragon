@@ -30,6 +30,9 @@ jobs:
       - name: Set up CMake
         uses: lukka/get-cmake@latest
 
+      - name: Install gcovr
+        run: pip install gcovr
+
       - name: Configure
         run: |
           cmake -B build -S . \
