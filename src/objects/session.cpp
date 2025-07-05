@@ -2,7 +2,8 @@
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or any later version.
+// the Free Software Foundation, either version 3 of the License, or any later
+// version.
 //
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -34,8 +35,7 @@ boost::asio::awaitable<void> session(boost::beast::tcp_stream stream) {
       boost::beast::http::request<boost::beast::http::string_body> req;
       co_await boost::beast::http::async_read(stream, buffer, req);
 
-      boost::beast::http::message_generator msg =
-          handler(std::move(req));
+      boost::beast::http::message_generator msg = handler(std::move(req));
 
       bool keep_alive = msg.keep_alive();
       co_await boost::beast::async_write(stream, std::move(msg),

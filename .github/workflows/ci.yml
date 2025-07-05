@@ -2,15 +2,36 @@ name: CI
 
 on: [push]
 
+
+
 jobs:
   build:
     name: Build
 
     runs-on: ubuntu-22.04-arm
 
+    strategy:
+      matrix:
+        type: [Debug, Release]
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang-format
+          pip install cmake-format gcovr
+
+      - name: Check clang-format compliance
+        run: |
+          find ./src -regex '.*\.\(cpp\|hpp\|cc\|cxx\)' \
+            -exec clang-format --dry-run --Werror -style=Chromium {} +
+
+      - name: Check cmake-format compliance
+        run: |
+          cmake-format --check CMakeLists.txt
 
       - name: Install Boost
         uses: MarkusJx/install-boost@v2.5.0
@@ -26,9 +47,26 @@ jobs:
 
       - name: Configure
         run: |
-          cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DBOOST_ROOT=$BOOST_ROOT
+          cmake -B build -S . \
+            -DCMAKE_BUILD_TYPE=${{ matrix.type }} \
+            -DBOOST_ROOT=${{ env.BOOST_ROOT }} \
+            -DBUILD_TESTS=${{ matrix.type == 'Debug' && 'ON' || 'OFF' }} \
+            -DBoost_INCLUDE_DIR=${{ env.BOOST_ROOT }}/include \
+            -DBoost_LIBRARY_DIRS=${{env.BOOST_ROOT }}/lib
         env:
           BOOST_ROOT: ${{ steps.install-boost.outputs.BOOST_ROOT }}
 
       - name: Build
-        run: cmake --build build --config Release
+        run: cmake --build build --config ${{ matrix.type }}
+
+      - name: Test
+        if: ${{ matrix.type == 'Debug' }}
+        run: |
+          ctest --test-dir build --output-on-failure --verbose
+          gcovr --filter='src/' --print-summary --sort=uncovered-percent
+
+      - name: Upload coverage reports to Codecov
+        if: ${{ matrix.type == 'Debug' }}
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}

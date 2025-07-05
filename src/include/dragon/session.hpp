@@ -2,7 +2,8 @@
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or any later version.
+// the Free Software Foundation, either version 3 of the License, or any later
+// version.
 //
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -19,13 +20,13 @@
 #include <boost/beast/core/tcp_stream.hpp>
 
 namespace dragon {
-    /**
-     * Session
-     *
-     * @param stream
-     * @return
-     */
-    boost::asio::awaitable<void> session(boost::beast::tcp_stream stream);
-}
+/**
+ * Session
+ *
+ * @param stream
+ * @return
+ */
+boost::asio::awaitable<void> session(boost::beast::tcp_stream stream);
+}  // namespace dragon
 
 #endif  // DRAGON_SESSION_HPP

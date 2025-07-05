@@ -2,7 +2,8 @@
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or any later version.
+// the Free Software Foundation, either version 3 of the License, or any later
+// version.
 //
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -24,13 +25,13 @@
 #endif
 
 namespace dragon {
-    /**
-     * Handler
-     *
-     * @param req
-     * @return
-     */
-    inline boost::beast::http::message_generator handler(
+/**
+ * Handler
+ *
+ * @param req
+ * @return
+ */
+inline boost::beast::http::message_generator handler(
     boost::beast::http::request<boost::beast::http::string_body>&& req) {
   auto const bad_request = [&req](const boost::beast::string_view why) {
     boost::beast::http::response<boost::beast::http::string_body> res{
@@ -44,7 +45,7 @@ namespace dragon {
     return res;
   };
 
-  auto const not_found = [&req](const boost::beast::string_view target) {
+  auto const not_found = [&req]() {
     boost::beast::http::response<boost::beast::http::string_body> res{
         boost::beast::http::status::not_found, req.version()};
     res.set(boost::beast::http::field::server, SERVER_STRING);
@@ -60,7 +61,7 @@ namespace dragon {
       req.target().find("..") != boost::beast::string_view::npos)
     return bad_request("Resource bad requested");
 
-  return not_found(req.target());
+  return not_found();
 }
 
 }  // namespace dragon

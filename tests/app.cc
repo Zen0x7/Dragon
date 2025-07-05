@@ -2,8 +2,7 @@
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or any later
-// version.
+// the Free Software Foundation, either version 3 of the License, or any later version.
 //
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -13,20 +12,12 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-#ifndef DRAGON_LISTENER_HPP
-#define DRAGON_LISTENER_HPP
+#include <gtest/gtest.h>
 
-#include <boost/asio/awaitable.hpp>
-#include <boost/asio/ip/tcp.hpp>
+#include <dragon/app.hpp>
 
-namespace dragon {
-/**
- * Listener
- *
- * @param endpoint
- * @return
- */
-boost::asio::awaitable<void> listener(boost::asio::ip::tcp::endpoint endpoint);
-}  // namespace dragon
 
-#endif  // DRAGON_LISTENER_HPP
+TEST(Dragon, Version)
+{
+    ASSERT_EQ(dragon::version(), "1.0.0");
+}
