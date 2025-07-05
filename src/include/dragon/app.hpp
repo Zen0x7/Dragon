@@ -2,7 +2,8 @@
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or any later version.
+// the Free Software Foundation, either version 3 of the License, or any later
+// version.
 //
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -18,23 +19,23 @@
 #include <string>
 
 namespace dragon {
-    /**
-     * Serve
-     *
-     * @param argc
-     * @param argv
-     * @return
-     */
-    int serve(int argc, char* argv[]);
+/**
+ * Serve
+ *
+ * @param argc
+ * @param argv
+ * @return
+ */
+int serve(int argc, char* argv[]);
 
-    /**
-     * Version
-     *
-     * @return
-     */
-    inline std::string version() {
-        return "1.0.0";
-    }
+/**
+ * Version
+ *
+ * @return
+ */
+inline std::string version() {
+  return "1.0.0";
 }
+}  // namespace dragon
 
 #endif  // DRAGON_APP_HPP

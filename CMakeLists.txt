@@ -11,13 +11,15 @@ include(FetchContent)
 set(CMAKE_CXX_FLAGS "-Wall -Wextra -Werror -Wpedantic")
 set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g --coverage -fprofile-arcs -ftest-coverage")
 
-set(CMAKE_CXX_FLAGS_RELEASE "-Ofast -flto -march=native -mtune=native -g0 -DNDEBUG")
-set(CMAKE_C_FLAGS_RELEASE "-Ofast -flto -march=native -mtune=native -g0 -DNDEBUG")
+set(CMAKE_CXX_FLAGS_RELEASE
+    "-Ofast -flto -march=native -mtune=native -g0 -DNDEBUG")
+set(CMAKE_C_FLAGS_RELEASE
+    "-Ofast -flto -march=native -mtune=native -g0 -DNDEBUG")
 
-find_package(Boost 1.88.0 COMPONENTS
-    json coroutine program_options system
-REQUIRED)
-
+find_package(
+  Boost 1.88.0
+  COMPONENTS json coroutine program_options system
+  REQUIRED)
 
 file(GLOB_RECURSE SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/objects/*.cpp")
 
@@ -30,21 +32,21 @@ target_link_libraries(dragon_core PUBLIC ${Boost_LIBRARIES})
 add_executable(dragon src/main.cpp)
 target_link_libraries(dragon dragon_core)
 
+if(BUILD_TESTS)
+  FetchContent_Declare(
+    googletest
+    URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
+  )
+  FetchContent_MakeAvailable(googletest)
 
-if (BUILD_TESTS)
-    fetchcontent_declare(
-            googletest
-            URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
-    )
-    fetchcontent_makeavailable(googletest)
+  enable_testing()
 
-    enable_testing()
+  file(GLOB_RECURSE TESTS CONFIGURE_DEPENDS
+       "${CMAKE_CURRENT_SOURCE_DIR}/tests/*.cc")
 
-    file(GLOB_RECURSE TESTS CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/tests/*.cc")
+  add_executable(tests ${TESTS})
 
-    add_executable(tests ${TESTS})
-
-    target_link_libraries(tests GTest::gtest_main dragon_core)
-    include(GoogleTest)
-    gtest_discover_tests(tests)
-endif ()
+  target_link_libraries(tests GTest::gtest_main dragon_core)
+  include(GoogleTest)
+  gtest_discover_tests(tests)
+endif()
