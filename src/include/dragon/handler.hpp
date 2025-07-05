@@ -33,9 +33,11 @@ namespace dragon {
 inline boost::beast::http::message_generator handler(
     const boost::beast::http::request<boost::beast::http::string_body>&
         request) {
-  if (request.target()[0] != '/' || // LCOV_EXCL_LINE Note:
-      // not starting root symbol has been tested on
-      // serve_test::it_can_handle_bad_requests on the "rootless" path.
+  if (request.target()[0] !=
+          '/' ||  // LCOV_EXCL_LINE Note:
+                  // not starting root symbol has been tested on
+                  // serve_test::it_can_handle_bad_requests on the "rootless"
+                  // path.
       request.target().find("..") != boost::beast::string_view::npos)
     return handlers::bad_request(request);
 

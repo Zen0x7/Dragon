@@ -104,7 +104,7 @@ TEST_F(serve_test, it_can_handle_bad_requests) {
   _stream.connect(_results);
 
   std::array<std::string, 2> _paths = {
-      "rootless",   // [0] != '/'
+      "rootless",        // [0] != '/'
       "/../going-back",  // contains "..",
   };
 

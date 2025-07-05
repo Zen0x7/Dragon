@@ -45,17 +45,17 @@ boost::asio::awaitable<void> listener(
     boost::asio::co_spawn(
         _acceptor.get_executor(), session(state, std::move(_stream)),
         [](const std::exception_ptr& exception) {
-            // This lambda is executed when a session is closed.
+          // This lambda is executed when a session is closed.
           if (exception) {
-              // I'm not cover this scope, as basic as
-              // application should not throw exceptions
-              // in the session.
-              try {
-                 std::rethrow_exception(exception);
-               } catch (std::exception& scoped_exception) {
-                 std::cerr << "Error in session: " << scoped_exception.what()
-                           << "\n";
-               }
+            // I'm not cover this scope, as basic as
+            // application should not throw exceptions
+            // in the session.
+            try {
+              std::rethrow_exception(exception);
+            } catch (std::exception& scoped_exception) {
+              std::cerr << "Error in session: " << scoped_exception.what()
+                        << "\n";
+            }
           }
         });
   }
