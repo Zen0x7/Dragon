@@ -18,11 +18,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install formatters
+      - name: Install dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install -y clang-format
-          pip install cmake-format
+          pip install cmake-format gcovr
+
+      - name: Check clang-format compliance
+        uses: jidicula/clang-format-action@v4.15.0
+        with:
+          clang-format-version: '13'
+          check-path: 'src'
+          fallback-style: 'Chromium'
 
       - name: Check clang-format compliance
         run: |
@@ -44,9 +49,6 @@ jobs:
 
       - name: Set up CMake
         uses: lukka/get-cmake@latest
-
-      - name: Install gcovr
-        run: pip install gcovr
 
       - name: Configure
         run: |
