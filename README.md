@@ -1,7 +1,7 @@
 # 🐲 Dragon
 
 <p align="center">
-<a href="https://github.com/Zen0x7/Dragon/actions/workflows/ci.yml"><img src="https://github.com/Zen0x7/Dragon/actions/workflows/build.yml/badge.svg" alt="CI"></a>
+<a href="https://github.com/Zen0x7/Dragon/actions/workflows/ci.yml"><img src="https://github.com/Zen0x7/Dragon/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
 <a href="https://codecov.io/gh/Zen0x7/Dragon"><img src="https://codecov.io/gh/Zen0x7/Dragon/graph/badge.svg?token=PGWRDY6SZ9" alt="Coverage"></a>
 <a href="https://sonarcloud.io/project/overview?id=Zen0x7_Dragon"><img src="https://sonarcloud.io/api/project_badges/measure?project=Zen0x7_Dragon&metric=alert_status" alt="Quality Gate"></a>
 </p>
