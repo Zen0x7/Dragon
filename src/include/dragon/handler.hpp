@@ -16,52 +16,28 @@
 #ifndef DRAGON_HANDLER_HPP
 #define DRAGON_HANDLER_HPP
 
+#include <dragon/handlers/bad_request.hpp>
+#include <dragon/handlers/not_found.hpp>
+
 #include <boost/beast/http/message_generator.hpp>
 #include <boost/beast/http/string_body.hpp>
 #include <boost/json/serialize.hpp>
 
-#ifndef SERVER_STRING
-#define SERVER_STRING "Dragon"
-#endif
-
 namespace dragon {
+using namespace boost::beast::http;
+
 /**
  * Handler
  *
- * @param req
+ * @param request
  * @return
  */
-inline boost::beast::http::message_generator handler(
-    boost::beast::http::request<boost::beast::http::string_body>&& req) {
-  auto const bad_request = [&req](const boost::beast::string_view why) {
-    boost::beast::http::response<boost::beast::http::string_body> res{
-        boost::beast::http::status::bad_request, req.version()};
-    res.set(boost::beast::http::field::server, SERVER_STRING);
-    res.set(boost::beast::http::field::content_type, "application/json");
-    res.keep_alive(req.keep_alive());
-    res.body() = boost::json::serialize(
-        boost::json::object({{"status", 400}, {"message", why}}));
-    res.prepare_payload();
-    return res;
-  };
+inline message_generator handler(const request<string_body> &request) {
+  if (request.target().empty() || request.target()[0] != '/' ||
+      request.target().find("..") != boost::beast::string_view::npos)
+    return handlers::bad_request(request);
 
-  auto const not_found = [&req]() {
-    boost::beast::http::response<boost::beast::http::string_body> res{
-        boost::beast::http::status::not_found, req.version()};
-    res.set(boost::beast::http::field::server, SERVER_STRING);
-    res.set(boost::beast::http::field::content_type, "application/json");
-    res.keep_alive(req.keep_alive());
-    res.body() = boost::json::serialize(boost::json::object(
-        {{"status", 404}, {"message", "Resource not found"}}));
-    res.prepare_payload();
-    return res;
-  };
-
-  if (req.target().empty() || req.target()[0] != '/' ||
-      req.target().find("..") != boost::beast::string_view::npos)
-    return bad_request("Resource bad requested");
-
-  return not_found();
+  return handlers::not_found(request);
 }
 
 }  // namespace dragon

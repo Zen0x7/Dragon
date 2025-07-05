@@ -26,46 +26,33 @@
 #include <iostream>
 #include <thread>
 
-int dragon::serve(int argc, char* argv[]) {
-  using namespace boost::program_options;
+namespace dragon {
+    int serve(const config & config) {
+        boost::asio::io_context _ioc{config.threads_};
 
-  options_description desc("Options");
+        const auto _endpoint = boost::asio::ip::tcp::endpoint{
+            boost::asio::ip::make_address(config.address_), config.port_
+        };
 
-  desc.add_options()("address", value<std::string>()->default_value("0.0.0.0"),
-                     "Address")(
-      "port", value<unsigned short>()->default_value(8000), "Port")(
-      "threads", value<int>()->default_value(1), "Threads");
+        boost::asio::co_spawn(
+            _ioc,
+            listener(_endpoint),
+            [](const std::exception_ptr &exception) {
+              if (exception)
+                  try {
+                    std::rethrow_exception(exception);
+                  } catch (std::exception& scoped_exception) {
+                    std::cerr << "Error in acceptor: " << scoped_exception.what() << "\n";
+                  }
+              });
 
-  variables_map vm;
-  store(parse_command_line(argc, argv, desc), vm);
+        std::vector<std::jthread> _threads;
+        _threads.reserve(config.threads_ - 1);
+        for (auto _i = config.threads_ - 1; _i > 0; --_i)
+            _threads.emplace_back([&_ioc] { _ioc.run(); });
+        _ioc.run();
 
-  if (vm.contains("help")) {
-    std::cout << desc << std::endl;
-    return 0;
-  }
-
-  boost::asio::io_context ioc{vm["threads"].as<int>()};
-
-  boost::asio::co_spawn(
-      ioc,
-      dragon::listener(boost::asio::ip::tcp::endpoint{
-          boost::asio::ip::make_address(vm["address"].as<std::string>()),
-          vm["port"].as<unsigned short>()}),
-      [](std::exception_ptr e) {
-        if (e)
-          try {
-            std::rethrow_exception(e);
-          } catch (std::exception& scoped_exception) {
-            std::cerr << "Error in acceptor: " << scoped_exception.what()
-                      << "\n";
-          }
-      });
-
-  std::vector<std::thread> v;
-  v.reserve(vm["threads"].as<int>() - 1);
-  for (auto i = vm["threads"].as<int>() - 1; i > 0; --i)
-    v.emplace_back([&ioc] { ioc.run(); });
-  ioc.run();
-
-  return EXIT_SUCCESS;
+        return EXIT_SUCCESS;
+    }
 }
+

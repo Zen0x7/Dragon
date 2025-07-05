@@ -13,20 +13,31 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-#ifndef DRAGON_LISTENER_HPP
-#define DRAGON_LISTENER_HPP
+#ifndef DRAGON_CONFIG_HPP
+#define DRAGON_CONFIG_HPP
 
-#include <boost/asio/awaitable.hpp>
-#include <boost/asio/ip/tcp.hpp>
+#include <string>
 
 namespace dragon {
-/**
- * Listener
- *
- * @param endpoint
- * @return
- */
-boost::asio::awaitable<void> listener(const boost::asio::ip::tcp::endpoint& endpoint);
-}  // namespace dragon
+    /**
+     * Config
+     */
+    struct config {
+        /**
+         * Address
+         */
+        std::string address_;
 
-#endif  // DRAGON_LISTENER_HPP
+        /**
+         * Port
+         */
+        unsigned short port_;
+
+        /**
+         * Threads
+         */
+        int threads_;
+    };
+}
+
+#endif // DRAGON_CONFIG_HPP

@@ -25,32 +25,33 @@
 #include <boost/beast/http/string_body.hpp>
 
 namespace dragon {
+using namespace boost::beast::http;
 
 boost::asio::awaitable<void> session(boost::beast::tcp_stream stream) {
-  boost::beast::flat_buffer buffer;
+  using namespace boost::beast;
+  flat_buffer _buffer;
   try {
     for (;;) {
       stream.expires_after(std::chrono::seconds(30));
 
-      boost::beast::http::request<boost::beast::http::string_body> req;
-      co_await boost::beast::http::async_read(stream, buffer, req);
+      request<string_body> _request;
+      co_await http::async_read(stream, _buffer, _request);
 
-      boost::beast::http::message_generator msg = handler(std::move(req));
+      message_generator _message = handler(std::move(_request));
 
-      bool keep_alive = msg.keep_alive();
-      co_await boost::beast::async_write(stream, std::move(msg),
-                                         boost::asio::use_awaitable);
+      const bool _keep_alive = _message.keep_alive();
+      co_await async_write(stream, std::move(_message), boost::asio::use_awaitable);
 
-      if (!keep_alive) {
+      if (!_keep_alive) {
         break;
       }
     }
-  } catch (boost::system::system_error& se) {
-    if (se.code() != boost::beast::http::error::end_of_stream)
+  } catch (boost::system::system_error& system_error) {
+    if (system_error.code() != http::error::end_of_stream)
       throw;
   }
 
-  boost::beast::error_code ec;
-  stream.socket().shutdown(boost::asio::ip::tcp::socket::shutdown_send, ec);
+  error_code _error_code;
+  stream.socket().shutdown(boost::asio::ip::tcp::socket::shutdown_send, _error_code);
 }
 }  // namespace dragon

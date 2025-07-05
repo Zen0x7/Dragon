@@ -8,6 +8,8 @@ option(BUILD_TESTS "Build tests cases" ON)
 
 include(FetchContent)
 
+add_definitions(-DSERVER_NAME="Dragon")
+
 set(CMAKE_CXX_FLAGS "-Wall -Wextra -Werror -Wpedantic")
 set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g --coverage -fprofile-arcs -ftest-coverage")
 
