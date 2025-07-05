@@ -26,8 +26,8 @@
 
 namespace dragon {
 boost::asio::awaitable<void> listener(
-    const std::shared_ptr<state> state,
-    const boost::asio::ip::tcp::endpoint endpoint) {
+    const std::shared_ptr<state>& state,
+    const boost::asio::ip::tcp::endpoint& endpoint) {
   const auto _executor = co_await boost::asio::this_coro::executor;
   auto _acceptor = boost::asio::use_awaitable_t<>::as_default_on(
       boost::asio::ip::tcp::acceptor(_executor));
