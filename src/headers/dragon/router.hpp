@@ -55,8 +55,8 @@ class router {
    */
   std::shared_ptr<callback_base> find(const boost::beast::http::verb method,
                                       const std::string& path) const {
-    if (const auto _it = routes_.find(compose_key(method, path));
-        _it != routes_.end())
+    const auto _it = routes_.find(compose_key(method, path));
+    if (_it != routes_.end())
       return _it->second;
     return nullptr;
   }
