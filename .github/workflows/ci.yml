@@ -20,14 +20,14 @@ jobs:
 
       - name: Install dependencies
         run: |
+          sudo apt-get update
+          sudo apt-get install -y clang-format
           pip install cmake-format gcovr
 
       - name: Check clang-format compliance
-        uses: jidicula/clang-format-action@v4.15.0
-        with:
-          clang-format-version: '13'
-          check-path: 'src'
-          fallback-style: 'Chromium'
+        run: |
+          find ./src -regex '.*\.\(cpp\|hpp\|cc\|cxx\)' \
+            -exec clang-format --dry-run --Werror -style=Chromium {} +
 
       - name: Check cmake-format compliance
         run: |
