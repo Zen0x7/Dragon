@@ -51,12 +51,9 @@ TEST_F(app_test, it_can_handle_welcome_request) {
   ASSERT_TRUE(_body.is_object());
 
   auto _body_ = _body.as_object();
-  ASSERT_TRUE(_body_.contains("status"));
-  ASSERT_TRUE(_body_.at("status").is_number());
-  ASSERT_EQ(_body_.at("status").as_int64(), 200);
-  ASSERT_TRUE(_body_.contains("message"));
-  ASSERT_TRUE(_body_.at("message").is_string());
-  ASSERT_EQ(_body_.at("message").as_string(), "Welcome");
+  ASSERT_TRUE(_body_.contains("data"));
+  ASSERT_TRUE(_body_.at("data").is_string());
+  ASSERT_EQ(_body_.at("data").as_string(), "EHLO");
 
   boost::beast::error_code _error_code;
   _stream.socket().shutdown(boost::asio::ip::tcp::socket::shutdown_both,

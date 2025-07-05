@@ -45,8 +45,8 @@ void engine::bootstrap(const std::shared_ptr<dragon::app>& app) {
         _response.set(boost::beast::http::field::content_type,
                       "application/json");
         _response.keep_alive(request.keep_alive());
-        _response.body() = boost::json::serialize(
-            boost::json::object({{"status", 200}, {"message", "Welcome"}}));
+        _response.body() =
+            boost::json::serialize(boost::json::object({{"data", "EHLO"}}));
         _response.prepare_payload();
         return _response;
       });
