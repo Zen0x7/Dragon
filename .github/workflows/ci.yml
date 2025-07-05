@@ -53,7 +53,7 @@ jobs:
           cmake -B build -S . \
             -DCMAKE_BUILD_TYPE=${{ matrix.type }} \
             -DBOOST_ROOT=${{ env.BOOST_ROOT }} \
-            -DBUILD_TESTS=${{ matrix.type == 'Debug' && 'ON' || 'OFF' }} \
+            -DBUILD_DRAGON_TESTS=${{ matrix.type == 'Debug' && 'ON' || 'OFF' }} \
             -DBoost_INCLUDE_DIR=${{ env.BOOST_ROOT }}/include \
             -DBoost_LIBRARY_DIRS=${{env.BOOST_ROOT }}/lib
         env:

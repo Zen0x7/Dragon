@@ -14,9 +14,9 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 #include <dragon/session.hpp>
-#include <dragon/state.hpp>
 
 #include <dragon/handler.hpp>
+#include <dragon/state.hpp>
 
 #include <boost/asio/use_awaitable.hpp>
 

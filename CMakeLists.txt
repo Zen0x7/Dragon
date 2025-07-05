@@ -4,7 +4,7 @@ project(Dragon)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-option(BUILD_TESTS "Build tests cases" ON)
+option(BUILD_DRAGON_TESTS "Build tests cases" ON)
 
 include(FetchContent)
 
@@ -23,18 +23,31 @@ find_package(
   COMPONENTS json coroutine program_options system
   REQUIRED)
 
-file(GLOB_RECURSE SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/objects/*.cpp")
+# Find objects
+file(GLOB_RECURSE DRAGON_SOURCES
+     "${CMAKE_CURRENT_SOURCE_DIR}/src/objects/dragon/*.cpp")
+file(GLOB_RECURSE APP_SOURCES
+     "${CMAKE_CURRENT_SOURCE_DIR}/src/objects/app/*.cpp")
 
-include_directories(src/include)
+# Include headers
+include_directories(src/headers)
 
-add_library(dragon_core ${SOURCES})
-target_include_directories(dragon_core PUBLIC ${Boost_INCLUDE_DIRS} src/include)
+# Add libraries
+add_library(app_core ${APP_SOURCES})
+add_library(dragon_core ${DRAGON_SOURCES})
+
+# Add headers
+target_include_directories(dragon_core PUBLIC ${Boost_INCLUDE_DIRS}
+                                              src/headers/dragon)
 target_link_libraries(dragon_core PUBLIC ${Boost_LIBRARIES})
+target_include_directories(app_core PUBLIC ${Boost_INCLUDE_DIRS}
+                                           src/headers/app)
+target_link_libraries(app_core PUBLIC ${Boost_LIBRARIES})
 
 add_executable(dragon src/main.cpp)
-target_link_libraries(dragon dragon_core)
+target_link_libraries(dragon dragon_core app_core)
 
-if(BUILD_TESTS)
+if(BUILD_DRAGON_TESTS)
   FetchContent_Declare(
     googletest
     URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
@@ -48,7 +61,7 @@ if(BUILD_TESTS)
 
   add_executable(tests ${TESTS})
 
-  target_link_libraries(tests GTest::gtest_main dragon_core)
+  target_link_libraries(tests GTest::gtest_main dragon_core app_core)
   include(GoogleTest)
   gtest_discover_tests(tests)
 endif()

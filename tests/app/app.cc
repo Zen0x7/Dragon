@@ -15,8 +15,8 @@
 
 #include <gtest/gtest.h>
 
-#include <dragon/app.hpp>
+#include <app/app.hpp>
 
-TEST(Dragon, Version) {
-  ASSERT_EQ(dragon::version(), "1.0.0");
+TEST(app, version) {
+  ASSERT_EQ(app::version(), "1.0.0");
 }
