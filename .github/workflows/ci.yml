@@ -29,11 +29,6 @@ jobs:
           check-path: 'src'
           fallback-style: 'Chromium'
 
-      - name: Check clang-format compliance
-        run: |
-          find ./src -regex '.*\.\(cpp\|hpp\|cc\|cxx\)' \
-            -exec clang-format --dry-run --Werror -style=Chromium {} +
-
       - name: Check cmake-format compliance
         run: |
           cmake-format --check CMakeLists.txt
