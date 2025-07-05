@@ -13,10 +13,13 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-#include <gtest/gtest.h>
+#include <app/engine.hpp>
+#include <boost/core/ignore_unused.hpp>
 
-#include <app/app.hpp>
+namespace app {
+void engine::bootstrap(const std::shared_ptr<dragon::app>& app) {
+  // Bootstrap your application
 
-TEST(app, version) {
-  ASSERT_EQ(app::version(), "1.0.0");
+  boost::ignore_unused(app);  // Remove this when app becomes usable.
 }
+}  // namespace app

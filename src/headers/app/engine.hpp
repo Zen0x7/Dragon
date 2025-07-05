@@ -16,15 +16,26 @@
 #ifndef APP_APP_HPP
 #define APP_APP_HPP
 
+#include <dragon/app.hpp>
 #include <string>
 
 namespace app {
-/**
- * Version
- *
- * @return
- */
-std::string version();
+class engine : public std::enable_shared_from_this<engine> {
+ public:
+  /**
+   * Version
+   *
+   * @return
+   */
+  static std::string version() { return "1.0.0"; }
+
+  /**
+   * Bootstrap
+   *
+   * @param app
+   */
+  static void bootstrap(const std::shared_ptr<dragon::app>& app);
+};
 }  // namespace app
 
 #endif  // APP_APP_HPP
