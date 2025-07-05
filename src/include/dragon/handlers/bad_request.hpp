@@ -20,26 +20,25 @@
 #include <boost/json/serialize.hpp>
 
 namespace dragon::handlers {
-    using namespace boost::beast::http;
-    using namespace boost::json;
+using namespace boost::beast::http;
+using namespace boost::json;
 
-    /**
-     * Bad request
-     *
-     * @param request
-     * @return
-     */
-    inline response<string_body> bad_request(const request<string_body> &request) {
-        response<string_body> _response{status::bad_request, request.version()};
-        _response.set(field::server, SERVER_NAME);
-        _response.set(field::content_type, "application/json");
-        _response.keep_alive(request.keep_alive());
-        _response.body() = serialize(
-            object({{"status", 400}, {"message", "Resource bad requested"}})
-            );
-        _response.prepare_payload();
-        return _response;
-    }
+/**
+ * Bad request
+ *
+ * @param request
+ * @return
+ */
+inline response<string_body> bad_request(const request<string_body>& request) {
+  response<string_body> _response{status::bad_request, request.version()};
+  _response.set(field::server, SERVER_NAME);
+  _response.set(field::content_type, "application/json");
+  _response.keep_alive(request.keep_alive());
+  _response.body() = serialize(
+      object({{"status", 400}, {"message", "Resource bad requested"}}));
+  _response.prepare_payload();
+  return _response;
 }
+}  // namespace dragon::handlers
 
-#endif // DRAGON_HANDLERS_BAD_REQUEST_HPP
+#endif  // DRAGON_HANDLERS_BAD_REQUEST_HPP

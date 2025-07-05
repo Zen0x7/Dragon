@@ -19,25 +19,25 @@
 #include <string>
 
 namespace dragon {
-    /**
-     * Config
-     */
-    struct config {
-        /**
-         * Address
-         */
-        std::string address_;
+/**
+ * Config
+ */
+struct config {
+  /**
+   * Address
+   */
+  std::string address_;
 
-        /**
-         * Port
-         */
-        unsigned short port_;
+  /**
+   * Port
+   */
+  unsigned short port_;
 
-        /**
-         * Threads
-         */
-        int threads_;
-    };
-}
+  /**
+   * Threads
+   */
+  int threads_;
+};
+}  // namespace dragon
 
-#endif // DRAGON_CONFIG_HPP
+#endif  // DRAGON_CONFIG_HPP

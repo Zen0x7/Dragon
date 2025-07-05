@@ -17,8 +17,8 @@
 #include <dragon/config.hpp>
 
 #include <boost/program_options/options_description.hpp>
-#include <boost/program_options/variables_map.hpp>
 #include <boost/program_options/parsers.hpp>
+#include <boost/program_options/variables_map.hpp>
 #include <iostream>
 
 int main(const int argc, char* argv[]) {
@@ -26,9 +26,12 @@ int main(const int argc, char* argv[]) {
 
   auto _add_option = _description.add_options();
 
-  const auto _address_value = boost::program_options::value<std::string>()->default_value("0.0.0.0");
-  const auto _port_value = boost::program_options::value<unsigned short>()->default_value(8000);
-  const auto _threads_value = boost::program_options::value<int>()->default_value(1);
+  const auto _address_value =
+      boost::program_options::value<std::string>()->default_value("0.0.0.0");
+  const auto _port_value =
+      boost::program_options::value<unsigned short>()->default_value(8000);
+  const auto _threads_value =
+      boost::program_options::value<int>()->default_value(1);
 
   _add_option("address", _address_value, "Address");
   _add_option("port", _port_value, "Port");
@@ -42,11 +45,10 @@ int main(const int argc, char* argv[]) {
     return 0;
   }
 
-  const dragon::config _config {
-    .address_ = _variables["address"].as<std::string>(),
-    .port_ = _variables["port"].as<unsigned short>(),
-    .threads_ = _variables["threads"].as<int>()
-  };
+  const dragon::config _config{
+      .address_ = _variables["address"].as<std::string>(),
+      .port_ = _variables["port"].as<unsigned short>(),
+      .threads_ = _variables["threads"].as<int>()};
 
   return dragon::serve(_config);
 }

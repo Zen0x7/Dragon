@@ -27,32 +27,29 @@
 #include <thread>
 
 namespace dragon {
-    int serve(const config & config) {
-        boost::asio::io_context _ioc{config.threads_};
+int serve(const config& config) {
+  boost::asio::io_context _ioc{config.threads_};
 
-        const auto _endpoint = boost::asio::ip::tcp::endpoint{
-            boost::asio::ip::make_address(config.address_), config.port_
-        };
+  const auto _endpoint = boost::asio::ip::tcp::endpoint{
+      boost::asio::ip::make_address(config.address_), config.port_};
 
-        boost::asio::co_spawn(
-            _ioc,
-            listener(_endpoint),
-            [](const std::exception_ptr &exception) {
-              if (exception)
-                  try {
-                    std::rethrow_exception(exception);
-                  } catch (std::exception& scoped_exception) {
-                    std::cerr << "Error in acceptor: " << scoped_exception.what() << "\n";
-                  }
-              });
+  boost::asio::co_spawn(
+      _ioc, listener(_endpoint), [](const std::exception_ptr& exception) {
+        if (exception)
+          try {
+            std::rethrow_exception(exception);
+          } catch (std::exception& scoped_exception) {
+            std::cerr << "Error in acceptor: " << scoped_exception.what()
+                      << "\n";
+          }
+      });
 
-        std::vector<std::jthread> _threads;
-        _threads.reserve(config.threads_ - 1);
-        for (auto _i = config.threads_ - 1; _i > 0; --_i)
-            _threads.emplace_back([&_ioc] { _ioc.run(); });
-        _ioc.run();
+  std::vector<std::jthread> _threads;
+  _threads.reserve(config.threads_ - 1);
+  for (auto _i = config.threads_ - 1; _i > 0; --_i)
+    _threads.emplace_back([&_ioc] { _ioc.run(); });
+  _ioc.run();
 
-        return EXIT_SUCCESS;
-    }
+  return EXIT_SUCCESS;
 }
-
+}  // namespace dragon

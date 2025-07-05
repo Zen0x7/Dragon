@@ -40,7 +40,8 @@ boost::asio::awaitable<void> session(boost::beast::tcp_stream stream) {
       message_generator _message = handler(std::move(_request));
 
       const bool _keep_alive = _message.keep_alive();
-      co_await async_write(stream, std::move(_message), boost::asio::use_awaitable);
+      co_await async_write(stream, std::move(_message),
+                           boost::asio::use_awaitable);
 
       if (!_keep_alive) {
         break;
@@ -52,6 +53,7 @@ boost::asio::awaitable<void> session(boost::beast::tcp_stream stream) {
   }
 
   error_code _error_code;
-  stream.socket().shutdown(boost::asio::ip::tcp::socket::shutdown_send, _error_code);
+  stream.socket().shutdown(boost::asio::ip::tcp::socket::shutdown_send,
+                           _error_code);
 }
 }  // namespace dragon

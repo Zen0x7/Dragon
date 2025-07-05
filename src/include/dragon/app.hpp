@@ -27,7 +27,7 @@ namespace dragon {
  * @param config
  * @return
  */
-int serve(const config & config);
+int serve(const config& config);
 
 /**
  * Version
