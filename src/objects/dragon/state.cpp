@@ -18,4 +18,8 @@
 
 namespace dragon {
 state::state(config config) : config_(std::move(config)) {}
+
+std::shared_ptr<router> state::get_router() {
+  return router_;
+}
 }  // namespace dragon

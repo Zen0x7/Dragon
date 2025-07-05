@@ -41,7 +41,7 @@ boost::asio::awaitable<void> session(const std::shared_ptr<state> state,
       request<string_body> _request;
       co_await http::async_read(stream, _buffer, _request);
 
-      message_generator _message = handler(_request);
+      message_generator _message = handler(state, _request);
 
       const bool _keep_alive = _message.keep_alive();
       co_await async_write(stream, std::move(_message),

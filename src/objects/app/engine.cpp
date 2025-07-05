@@ -15,12 +15,11 @@
 
 #include <app/engine.hpp>
 
+#include <dragon/handlers/not_found.hpp>
+
+#include <boost/beast/http/verb.hpp>
 #include <boost/core/ignore_unused.hpp>
-
-// #include <boost/beast/http/verb.hpp>
-
-// #include <dragon/handlers/bad_request.hpp>
-// #include <dragon/handlers/not_found.hpp>
+#include <iostream>
 
 namespace app {
 void engine::bootstrap(const std::shared_ptr<dragon::app>& app) {
@@ -33,21 +32,23 @@ void engine::bootstrap(const std::shared_ptr<dragon::app>& app) {
   // app->config_->set_debug(true);
 
   // Register routes
-  // app->router_->bind(
-  //     boost::beast::http::verb::get, "/welcome",
-  //     [](const boost::beast::http::request<boost::beast::http::string_body>&
-  //            request,
-  //        const std::unordered_map<std::string, std::string>& params) {
-  //       return dragon::handlers::not_found(request);
-  //     });
-
-  // app->router_->bind(
-  //     boost::beast::http::verb::get, "/welcome/{param}",
-  //     [](const boost::beast::http::request<boost::beast::http::string_body>&
-  //            request,
-  //        const std::unordered_map<std::string, std::string>& params) {
-  //       std::cout << params.at("param") << std::endl;
-  //       return dragon::handlers::not_found(request);
-  //     });
+  const auto _router = app->get_state()->get_router();
+  _router->bind(
+      boost::beast::http::verb::get, "/welcome",
+      [](const boost::beast::http::request<boost::beast::http::string_body>&
+             request,
+         const std::unordered_map<std::string, std::string>& params) {
+        boost::ignore_unused(params);
+        boost::beast::http::response<boost::beast::http::string_body> _response{
+            boost::beast::http::status::ok, request.version()};
+        _response.set(boost::beast::http::field::server, SERVER_NAME);
+        _response.set(boost::beast::http::field::content_type,
+                      "application/json");
+        _response.keep_alive(request.keep_alive());
+        _response.body() = boost::json::serialize(
+            boost::json::object({{"status", 200}, {"message", "Welcome"}}));
+        _response.prepare_payload();
+        return _response;
+      });
 }
 }  // namespace app
