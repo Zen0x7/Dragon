@@ -24,9 +24,11 @@ file(GLOB_RECURSE SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/objects/*.cpp")
 include_directories(src/include)
 
 add_library(dragon_core ${SOURCES})
+target_include_directories(dragon_core PUBLIC ${Boost_INCLUDE_DIRS} src/include)
+target_link_libraries(dragon_core PUBLIC ${Boost_LIBRARIES})
 
 add_executable(dragon src/main.cpp)
-target_link_libraries(dragon dragon_core ${Boost_LIBRARIES})
+target_link_libraries(dragon dragon_core)
 
 
 if (BUILD_TESTS)
@@ -42,7 +44,7 @@ if (BUILD_TESTS)
 
     add_executable(tests ${TESTS})
 
-    target_link_libraries(tests GTest::gtest_main dragon_core ${Boost_LIBRARIES})
+    target_link_libraries(tests GTest::gtest_main dragon_core)
     include(GoogleTest)
     gtest_discover_tests(tests)
 endif ()
