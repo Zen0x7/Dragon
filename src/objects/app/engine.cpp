@@ -14,11 +14,13 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 #include <app/engine.hpp>
-#include <boost/beast/http/verb.hpp>
+
 #include <boost/core/ignore_unused.hpp>
 
-#include <dragon/handlers/bad_request.hpp>
-#include <dragon/handlers/not_found.hpp>
+// #include <boost/beast/http/verb.hpp>
+
+// #include <dragon/handlers/bad_request.hpp>
+// #include <dragon/handlers/not_found.hpp>
 
 namespace app {
 void engine::bootstrap(const std::shared_ptr<dragon::app>& app) {
@@ -32,10 +34,20 @@ void engine::bootstrap(const std::shared_ptr<dragon::app>& app) {
 
   // Register routes
   // app->router_->bind(
-  //   boost::beast::http::verb::get,
-  //   "/welcome",
-  //   [](const boost::beast::http::request<boost::beast::http::string_body> &request) {
-  //   return dragon::handlers::not_found(request);
-  // });
+  //     boost::beast::http::verb::get, "/welcome",
+  //     [](const boost::beast::http::request<boost::beast::http::string_body>&
+  //            request,
+  //        const std::unordered_map<std::string, std::string>& params) {
+  //       return dragon::handlers::not_found(request);
+  //     });
+
+  // app->router_->bind(
+  //     boost::beast::http::verb::get, "/welcome/{param}",
+  //     [](const boost::beast::http::request<boost::beast::http::string_body>&
+  //            request,
+  //        const std::unordered_map<std::string, std::string>& params) {
+  //       std::cout << params.at("param") << std::endl;
+  //       return dragon::handlers::not_found(request);
+  //     });
 }
 }  // namespace app
