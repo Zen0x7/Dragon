@@ -44,7 +44,7 @@ TEST_F(app_test, it_can_handle_welcome_request) {
 
   ASSERT_EQ(_response["Content-Type"], "application/json");
   ASSERT_EQ(_response["Server"], "Dragon");
-  ASSERT_EQ(std::stoi(_response["Content-Length"]), 34);
+  ASSERT_EQ(std::stoi(_response["Content-Length"]), 15);
 
   auto _body = boost::json::parse(_response.body());
 
