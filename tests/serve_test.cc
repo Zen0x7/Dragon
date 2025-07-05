@@ -104,8 +104,8 @@ TEST_F(serve_test, it_can_handle_bad_requests) {
   _stream.connect(_results);
 
   std::array<std::string, 2> _paths = {
-      ".",   // [0] != '/'
-      "..",  // contains "..",
+      "rootless",   // [0] != '/'
+      "/../going-back",  // contains "..",
   };
 
   for (const auto& _path : _paths) {
@@ -121,8 +121,6 @@ TEST_F(serve_test, it_can_handle_bad_requests) {
 
     boost::beast::http::response<boost::beast::http::string_body> _response;
     boost::beast::http::read(_stream, _buffer, _response);
-
-    std::cout << _response << std::endl;
 
     ASSERT_EQ(_response["Content-Type"], "application/json");
     ASSERT_EQ(_response["Server"], "Dragon");
