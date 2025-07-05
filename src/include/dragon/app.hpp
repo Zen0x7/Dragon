@@ -40,12 +40,7 @@ class app : public std::enable_shared_from_this<app> {
   /**
    * State
    */
-  std::shared_ptr<state> state_ = std::make_shared<state>();
-
-  /**
-   * Config
-   */
-  config config_;
+  std::shared_ptr<state> state_;
 
   /**
    * IO Context

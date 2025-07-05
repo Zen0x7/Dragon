@@ -16,6 +16,8 @@
 #ifndef DRAGON_STATE_HPP
 #define DRAGON_STATE_HPP
 
+#include <dragon/config.hpp>
+
 #include <memory>
 
 namespace dragon {
@@ -25,9 +27,21 @@ namespace dragon {
 class state : public std::enable_shared_from_this<state> {
  public:
   /**
+   * Config
+   */
+  config config_;
+
+  /**
    * Running
    */
   bool running_ = false;
+
+  /**
+   * Constructor
+   *
+   * @param config
+   */
+  explicit state(config config);
 };
 }  // namespace dragon
 

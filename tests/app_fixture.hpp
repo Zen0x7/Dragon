@@ -2,7 +2,8 @@
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or any later version.
+// the Free Software Foundation, either version 3 of the License, or any later
+// version.
 //
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16,36 +17,52 @@
 #define DRAGON_TESTS_APP_FIXTURE_HPP
 
 #include <gtest/gtest.h>
+#include <dragon/app.hpp>
 #include <memory>
 #include <thread>
-#include <dragon/app.hpp>
 
 class app_fixture : public testing::Test {
-    std::unique_ptr<std::jthread> thread_;
+  /**
+   * Thread
+   */
+  std::unique_ptr<std::jthread> thread_;
 
+  /**
+   * App
+   */
+  std::shared_ptr<dragon::app> app_;
+
+ protected:
+  /**
+   * Get app
+   *
+   * @return
+   */
+  std::shared_ptr<dragon::app> get_app() { return app_; }
+
+  /**
+   * Setup
+   */
+  void SetUp() override {
     dragon::config config_ = {
         .address_ = "0.0.0.0",
         .port_ = 0,
-        .threads_ = 1,
+        .threads_ = 4,
     };
-protected:
-    std::shared_ptr<dragon::app> app_;
 
-    void SetUp() override {
-        app_ = std::make_shared<dragon::app>(config_);
+    app_ = std::make_shared<dragon::app>(config_);
 
-        thread_ = std::make_unique<std::jthread>([this] {
-            app_->run();
-        });
+    thread_ = std::make_unique<std::jthread>([this] { app_->run(); });
 
-        while (!app_->get_state()->running_) {
-            std::this_thread::sleep_for(std::chrono::milliseconds(5));
-        }
+    while (!app_->get_state()->running_) {
+      std::this_thread::sleep_for(std::chrono::milliseconds(5));
     }
+  }
 
-    void TearDown() override {
-        app_->stop();
-    }
+  /**
+   * Tear down
+   */
+  void TearDown() override { app_->stop(); }
 };
 
-#endif // DRAGON_TESTS_APP_FIXTURE_HPP
+#endif  // DRAGON_TESTS_APP_FIXTURE_HPP

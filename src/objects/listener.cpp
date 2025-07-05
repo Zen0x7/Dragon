@@ -37,6 +37,7 @@ boost::asio::awaitable<void> listener(
   _acceptor.bind(endpoint);
   _acceptor.listen(boost::asio::socket_base::max_listen_connections);
 
+  state->config_.port_ = _acceptor.local_endpoint().port();
   state->running_ = true;
 
   for (;;) {

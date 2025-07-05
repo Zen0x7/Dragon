@@ -13,10 +13,9 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-#include <gtest/gtest.h>
+#include <dragon/state.hpp>
+#include <utility>
 
-#include <dragon/app.hpp>
-
-TEST(Dragon, Version) {
-  ASSERT_EQ(dragon::version(), "1.0.0");
-}
+namespace dragon {
+state::state(config config) : config_(std::move(config)) {}
+}  // namespace dragon
