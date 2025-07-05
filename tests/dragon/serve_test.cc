@@ -15,7 +15,7 @@
 
 #include <gtest/gtest.h>
 
-#include "app_fixture.hpp"
+#include "../app_fixture.hpp"
 
 class serve_test : public app_fixture {};
 

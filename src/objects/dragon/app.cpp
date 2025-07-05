@@ -23,7 +23,6 @@
 #include <boost/asio/co_spawn.hpp>
 #include <boost/asio/io_context.hpp>
 
-#include <iostream>
 #include <thread>
 
 namespace dragon {
