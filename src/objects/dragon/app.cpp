@@ -17,6 +17,8 @@
 #include <dragon/exceptions.hpp>
 #include <dragon/listener.hpp>
 
+#include <app/engine.hpp>
+
 #include <boost/program_options/options_description.hpp>
 #include <boost/program_options/parsers.hpp>
 
@@ -33,6 +35,8 @@ app::app(const config& config)
                 state_->config_.port_) {}
 
 int app::run() {
+  ::app::engine::bootstrap(shared_from_this());
+
   boost::asio::co_spawn(ioc_, listener(state_, endpoint_),
                         exception_handler("acceptor"));
 

@@ -13,10 +13,32 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-#include <gtest/gtest.h>
+#ifndef APP_APP_HPP
+#define APP_APP_HPP
 
-#include <app/app.hpp>
+#include <dragon/app.hpp>
+#include <string>
 
-TEST(app, version) {
-  ASSERT_EQ(app::version(), "1.0.0");
-}
+namespace app {
+/**
+ * Engine
+ */
+class engine : public std::enable_shared_from_this<engine> {
+ public:
+  /**
+   * Version
+   *
+   * @return
+   */
+  static std::string version() { return "1.0.0"; }
+
+  /**
+   * Bootstrap
+   *
+   * @param app
+   */
+  static void bootstrap(const std::shared_ptr<dragon::app>& app);
+};
+}  // namespace app
+
+#endif  // APP_APP_HPP

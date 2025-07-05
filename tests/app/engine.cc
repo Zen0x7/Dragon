@@ -13,18 +13,10 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-#ifndef APP_APP_HPP
-#define APP_APP_HPP
+#include <gtest/gtest.h>
 
-#include <string>
+#include <app/engine.hpp>
 
-namespace app {
-/**
- * Version
- *
- * @return
- */
-std::string version();
-}  // namespace app
-
-#endif  // APP_APP_HPP
+TEST(engine, version) {
+  ASSERT_EQ(app::engine::version(), "1.0.0");
+}

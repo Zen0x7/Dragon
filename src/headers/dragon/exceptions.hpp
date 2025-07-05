@@ -21,6 +21,12 @@
 #include <string_view>
 
 namespace dragon {
+/**
+ * Exception handler
+ *
+ * @param where
+ * @return
+ */
 inline auto exception_handler(const std::string_view where) {
   return [where](const std::exception_ptr& exception) {
     if (exception) {
