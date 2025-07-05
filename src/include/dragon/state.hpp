@@ -2,7 +2,8 @@
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or any later version.
+// the Free Software Foundation, either version 3 of the License, or any later
+// version.
 //
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -12,11 +13,22 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-#include <gtest/gtest.h>
+#ifndef DRAGON_STATE_HPP
+#define DRAGON_STATE_HPP
 
-#include <dragon/app.hpp>
+#include <memory>
 
-TEST(Dragon, Version)
-{
-    ASSERT_EQ(dragon::version(), "1.0.0");
-}
+namespace dragon {
+/**
+ * State
+ */
+class state : public std::enable_shared_from_this<state> {
+ public:
+  /**
+   * Running
+   */
+  bool running_ = false;
+};
+}  // namespace dragon
+
+#endif  // DRAGON_STATE_HPP

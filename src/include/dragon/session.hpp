@@ -21,12 +21,19 @@
 
 namespace dragon {
 /**
+ * Forward state
+ */
+class state;
+
+/**
  * Session
  *
+ * @param state
  * @param stream
  * @return
  */
-boost::asio::awaitable<void> session(boost::beast::tcp_stream stream);
+boost::asio::awaitable<void> session(const std::shared_ptr<state>& state,
+                                     boost::beast::tcp_stream stream);
 }  // namespace dragon
 
 #endif  // DRAGON_SESSION_HPP

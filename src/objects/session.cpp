@@ -14,6 +14,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 #include <dragon/session.hpp>
+#include <dragon/state.hpp>
 
 #include <dragon/handler.hpp>
 
@@ -27,7 +28,10 @@
 namespace dragon {
 using namespace boost::beast::http;
 
-boost::asio::awaitable<void> session(boost::beast::tcp_stream stream) {
+boost::asio::awaitable<void> session(const std::shared_ptr<state>& state,
+                                     boost::beast::tcp_stream stream) {
+  boost::ignore_unused(state);
+
   using namespace boost::beast;
   flat_buffer _buffer;
   try {

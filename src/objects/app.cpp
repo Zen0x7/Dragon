@@ -18,7 +18,6 @@
 
 #include <boost/program_options/options_description.hpp>
 #include <boost/program_options/parsers.hpp>
-#include <boost/program_options/variables_map.hpp>
 
 #include <boost/asio/co_spawn.hpp>
 #include <boost/asio/io_context.hpp>
@@ -27,29 +26,38 @@
 #include <thread>
 
 namespace dragon {
-int serve(const config& config) {
-  boost::asio::io_context _ioc{config.threads_};
+app::app(const config& config)
+    : config_(config),
+      ioc_(config.threads_),
+      endpoint_(boost::asio::ip::make_address(config.address_), config.port_) {}
 
-  const auto _endpoint = boost::asio::ip::tcp::endpoint{
-      boost::asio::ip::make_address(config.address_), config.port_};
-
-  boost::asio::co_spawn(
-      _ioc, listener(_endpoint), [](const std::exception_ptr& exception) {
-        if (exception)
-          try {
-            std::rethrow_exception(exception);
-          } catch (std::exception& scoped_exception) {
-            std::cerr << "Error in acceptor: " << scoped_exception.what()
-                      << "\n";
-          }
-      });
+int app::run() {
+  boost::asio::co_spawn(ioc_, listener(state_, endpoint_),
+                        [](const std::exception_ptr& exception) {
+                          if (exception)
+                            try {
+                              std::rethrow_exception(exception);
+                            } catch (std::exception& scoped_exception) {
+                              std::cerr << "Error in acceptor: "
+                                        << scoped_exception.what() << "\n";
+                            }
+                        });
 
   std::vector<std::jthread> _threads;
-  _threads.reserve(config.threads_ - 1);
-  for (auto _i = config.threads_ - 1; _i > 0; --_i)
-    _threads.emplace_back([&_ioc] { _ioc.run(); });
-  _ioc.run();
+  _threads.reserve(config_.threads_ - 1);
+  for (auto _i = config_.threads_ - 1; _i > 0; --_i)
+    _threads.emplace_back(
+        [_self = this->shared_from_this()] { _self->ioc_.run(); });
+  ioc_.run();
 
   return EXIT_SUCCESS;
+}
+
+void app::stop() {
+  ioc_.stop();
+}
+
+std::shared_ptr<state> app::get_state() {
+  return state_;
 }
 }  // namespace dragon
