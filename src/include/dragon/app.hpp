@@ -17,18 +17,13 @@
 #define DRAGON_APP_HPP
 
 #include <dragon/config.hpp>
+#include <dragon/state.hpp>
 
+#include <boost/asio/io_context.hpp>
+#include <boost/asio/ip/tcp.hpp>
 #include <string>
 
 namespace dragon {
-/**
- * Serve
- *
- * @param config
- * @return
- */
-int serve(const config& config);
-
 /**
  * Version
  *
@@ -37,6 +32,58 @@ int serve(const config& config);
 inline std::string version() {
   return "1.0.0";
 }
+
+/**
+ * App
+ */
+class app : public std::enable_shared_from_this<app> {
+  /**
+   * State
+   */
+  std::shared_ptr<state> state_ = std::make_shared<state>();
+
+  /**
+   * Config
+   */
+  config config_;
+
+  /**
+   * IO Context
+   */
+  boost::asio::io_context ioc_;
+
+  /**
+   * Endpoint
+   */
+  boost::asio::ip::tcp::endpoint endpoint_;
+
+ public:
+  /**
+   * App constructor
+   *
+   * @param config
+   */
+  explicit app(const config& config);
+
+  /**
+   * Run
+   *
+   * @return
+   */
+  int run();
+
+  /**
+   * Stop
+   */
+  void stop();
+
+  /**
+   * Get state
+   *
+   * @return
+   */
+  std::shared_ptr<state> get_state();
+};
 }  // namespace dragon
 
 #endif  // DRAGON_APP_HPP

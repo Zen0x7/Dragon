@@ -15,8 +15,11 @@
 #include <gtest/gtest.h>
 
 #include <dragon/app.hpp>
+#include "app_fixture.hpp"
 
-TEST(Dragon, Version)
-{
-    ASSERT_EQ(dragon::version(), "1.0.0");
+class serve_test : public app_fixture
+{};
+
+TEST_F(serve_test, it_can_run) {
+    ASSERT_TRUE(app_->get_state()->running_);
 }

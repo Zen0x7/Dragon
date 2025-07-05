@@ -50,5 +50,6 @@ int main(const int argc, char* argv[]) {
       .port_ = _variables["port"].as<unsigned short>(),
       .threads_ = _variables["threads"].as<int>()};
 
-  return dragon::serve(_config);
+  const auto _app = std::make_shared<dragon::app>(_config);
+  return _app->run();
 }
