@@ -24,6 +24,8 @@
 
 #include <iostream>
 
+#include <dragon/exceptions.hpp>
+
 namespace dragon {
 boost::asio::awaitable<void> listener(
     const std::shared_ptr<state>& state,
@@ -42,17 +44,9 @@ boost::asio::awaitable<void> listener(
 
   for (;;) {
     auto _stream = boost::beast::tcp_stream(co_await _acceptor.async_accept());
-    boost::asio::co_spawn(
-        _acceptor.get_executor(), session(state, std::move(_stream)),
-        [](const std::exception_ptr& exception) {
-          if (exception)
-            try {
-              std::rethrow_exception(exception);
-            } catch (std::exception& scoped_exception) {
-              std::cerr << "Error in session: " << scoped_exception.what()
-                        << "\n";
-            }
-        });
+    boost::asio::co_spawn(_acceptor.get_executor(),
+                          session(state, std::move(_stream)),
+                          exception_handler("session"));
   }
 }
 }  // namespace dragon

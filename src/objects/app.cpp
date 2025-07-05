@@ -14,6 +14,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 #include <dragon/app.hpp>
+#include <dragon/exceptions.hpp>
 #include <dragon/listener.hpp>
 
 #include <boost/program_options/options_description.hpp>
@@ -34,15 +35,7 @@ app::app(const config& config)
 
 int app::run() {
   boost::asio::co_spawn(ioc_, listener(state_, endpoint_),
-                        [](const std::exception_ptr& exception) {
-                          if (exception)
-                            try {
-                              std::rethrow_exception(exception);
-                            } catch (std::exception& scoped_exception) {
-                              std::cerr << "Error in acceptor: "
-                                        << scoped_exception.what() << "\n";
-                            }
-                        });
+                        exception_handler("acceptor"));
 
   std::vector<std::jthread> _threads;
   _threads.reserve(state_->config_.threads_ - 1);
