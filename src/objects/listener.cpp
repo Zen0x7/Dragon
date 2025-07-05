@@ -26,8 +26,8 @@
 
 namespace dragon {
 boost::asio::awaitable<void> listener(
-    const std::shared_ptr<state>& state,
-    const boost::asio::ip::tcp::endpoint& endpoint) {
+    const std::shared_ptr<state> state,
+    const boost::asio::ip::tcp::endpoint endpoint) {
   const auto _executor = co_await boost::asio::this_coro::executor;
   auto _acceptor = boost::asio::use_awaitable_t<>::as_default_on(
       boost::asio::ip::tcp::acceptor(_executor));
@@ -37,6 +37,7 @@ boost::asio::awaitable<void> listener(
   _acceptor.bind(endpoint);
   _acceptor.listen(boost::asio::socket_base::max_listen_connections);
 
+  state->config_.port_ = _acceptor.local_endpoint().port();
   state->running_ = true;
 
   for (;;) {

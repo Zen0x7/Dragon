@@ -2,7 +2,8 @@
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or any later version.
+// the Free Software Foundation, either version 3 of the License, or any later
+// version.
 //
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -17,9 +18,10 @@
 #include <dragon/app.hpp>
 #include "app_fixture.hpp"
 
-class serve_test : public app_fixture
-{};
+class serve_test : public app_fixture {};
 
 TEST_F(serve_test, it_can_run) {
-    ASSERT_TRUE(app_->get_state()->running_);
+  const auto _state = get_app()->get_state();
+  ASSERT_TRUE(_state->running_);
+  ASSERT_NE(_state->config_.port_, 0);
 }

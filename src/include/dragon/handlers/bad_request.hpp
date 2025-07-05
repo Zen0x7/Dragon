@@ -20,22 +20,22 @@
 #include <boost/json/serialize.hpp>
 
 namespace dragon::handlers {
-using namespace boost::beast::http;
-using namespace boost::json;
-
 /**
  * Bad request
  *
  * @param request
  * @return
  */
-inline response<string_body> bad_request(const request<string_body>& request) {
-  response<string_body> _response{status::bad_request, request.version()};
-  _response.set(field::server, SERVER_NAME);
-  _response.set(field::content_type, "application/json");
+inline boost::beast::http::response<boost::beast::http::string_body>
+bad_request(const boost::beast::http::request<boost::beast::http::string_body>&
+                request) {
+  boost::beast::http::response<boost::beast::http::string_body> _response{
+      boost::beast::http::status::bad_request, request.version()};
+  _response.set(boost::beast::http::field::server, SERVER_NAME);
+  _response.set(boost::beast::http::field::content_type, "application/json");
   _response.keep_alive(request.keep_alive());
-  _response.body() = serialize(
-      object({{"status", 400}, {"message", "Resource bad requested"}}));
+  _response.body() = boost::json::serialize(boost::json::object(
+      {{"status", 400}, {"message", "Resource bad requested"}}));
   _response.prepare_payload();
   return _response;
 }

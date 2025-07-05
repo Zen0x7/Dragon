@@ -27,9 +27,10 @@
 
 namespace dragon {
 app::app(const config& config)
-    : config_(config),
-      ioc_(config.threads_),
-      endpoint_(boost::asio::ip::make_address(config.address_), config.port_) {}
+    : state_(std::make_shared<state>(config)),
+      ioc_(state_->config_.threads_),
+      endpoint_(boost::asio::ip::make_address(state_->config_.address_),
+                state_->config_.port_) {}
 
 int app::run() {
   boost::asio::co_spawn(ioc_, listener(state_, endpoint_),
@@ -44,8 +45,8 @@ int app::run() {
                         });
 
   std::vector<std::jthread> _threads;
-  _threads.reserve(config_.threads_ - 1);
-  for (auto _i = config_.threads_ - 1; _i > 0; --_i)
+  _threads.reserve(state_->config_.threads_ - 1);
+  for (auto _i = state_->config_.threads_ - 1; _i > 0; --_i)
     _threads.emplace_back(
         [_self = this->shared_from_this()] { _self->ioc_.run(); });
   ioc_.run();
