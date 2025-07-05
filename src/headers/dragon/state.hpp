@@ -17,6 +17,7 @@
 #define DRAGON_STATE_HPP
 
 #include <dragon/config.hpp>
+#include <dragon/router.hpp>
 
 #include <memory>
 
@@ -32,6 +33,11 @@ class state : public std::enable_shared_from_this<state> {
   config config_;
 
   /**
+   * Router
+   */
+  std::shared_ptr<router> router_ = std::make_shared<router>();
+
+  /**
    * Running
    */
   bool running_ = false;
@@ -42,6 +48,13 @@ class state : public std::enable_shared_from_this<state> {
    * @param config
    */
   explicit state(config config);
+
+  /**
+   * Get router
+   *
+   * @return
+   */
+  std::shared_ptr<router> get_router();
 };
 }  // namespace dragon
 
