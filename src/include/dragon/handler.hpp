@@ -33,7 +33,7 @@ namespace dragon {
 inline boost::beast::http::message_generator handler(
     const boost::beast::http::request<boost::beast::http::string_body>&
         request) {
-  if (request.target().empty() || request.target()[0] != '/' ||
+  if (request.target()[0] != '/' ||
       request.target().find("..") != boost::beast::string_view::npos)
     return handlers::bad_request(request);
 
