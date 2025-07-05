@@ -34,6 +34,9 @@ app::app(const config& config)
 
 int app::run() {
   boost::asio::co_spawn(ioc_, listener(state_, endpoint_),
+    // I'm not cover this handler, as basic as
+    // application should not throw exceptions
+    // in the listener.
                         [](const std::exception_ptr& exception) {
                           if (exception)
                             try {
