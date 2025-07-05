@@ -44,7 +44,7 @@ namespace dragon {
     return res;
   };
 
-  auto const not_found = [&req](const boost::beast::string_view target) {
+  auto const not_found = [&req]() {
     boost::beast::http::response<boost::beast::http::string_body> res{
         boost::beast::http::status::not_found, req.version()};
     res.set(boost::beast::http::field::server, SERVER_STRING);
@@ -60,7 +60,7 @@ namespace dragon {
       req.target().find("..") != boost::beast::string_view::npos)
     return bad_request("Resource bad requested");
 
-  return not_found(req.target());
+  return not_found();
 }
 
 }  // namespace dragon

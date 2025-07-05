@@ -8,7 +8,7 @@ option(BUILD_TESTS "Build tests cases" ON)
 
 include(FetchContent)
 
-set(CMAKE_CXX_FLAGS "-Wall -Wextra")
+set(CMAKE_CXX_FLAGS "-Wall -Wextra -Werror -Wpedantic")
 set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g --coverage -fprofile-arcs -ftest-coverage")
 
 set(CMAKE_CXX_FLAGS_RELEASE "-Ofast -flto -march=native -mtune=native -g0 -DNDEBUG")
