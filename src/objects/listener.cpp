@@ -24,28 +24,29 @@
 #include <iostream>
 
 namespace dragon {
-boost::asio::awaitable<void> listener(boost::asio::ip::tcp::endpoint endpoint) {
-  auto acceptor =
-      boost::asio::use_awaitable.as_default_on(boost::asio::ip::tcp::acceptor(
-          co_await boost::asio::this_coro::executor));
-  acceptor.open(endpoint.protocol());
-  acceptor.set_option(boost::asio::socket_base::reuse_address(true));
-  acceptor.bind(endpoint);
+boost::asio::awaitable<void> listener(
+    const boost::asio::ip::tcp::endpoint& endpoint) {
+  const auto _executor = co_await boost::asio::this_coro::executor;
+  auto _acceptor = boost::asio::use_awaitable_t<>::as_default_on(
+      boost::asio::ip::tcp::acceptor(_executor));
 
-  acceptor.listen(boost::asio::socket_base::max_listen_connections);
+  _acceptor.open(endpoint.protocol());
+  _acceptor.set_option(boost::asio::socket_base::reuse_address(true));
+  _acceptor.bind(endpoint);
+  _acceptor.listen(boost::asio::socket_base::max_listen_connections);
 
-  for (;;)
-    boost::asio::co_spawn(
-        acceptor.get_executor(),
-        session(boost::beast::tcp_stream(co_await acceptor.async_accept())),
-        [](std::exception_ptr e) {
-          if (e)
-            try {
-              std::rethrow_exception(e);
-            } catch (std::exception& scoped_exception) {
-              std::cerr << "Error in session: " << scoped_exception.what()
-                        << "\n";
-            }
-        });
+  for (;;) {
+    auto _stream = boost::beast::tcp_stream(co_await _acceptor.async_accept());
+    boost::asio::co_spawn(_acceptor.get_executor(), session(std::move(_stream)),
+                          [](const std::exception_ptr& exception) {
+                            if (exception)
+                              try {
+                                std::rethrow_exception(exception);
+                              } catch (std::exception& scoped_exception) {
+                                std::cerr << "Error in session: "
+                                          << scoped_exception.what() << "\n";
+                              }
+                          });
+  }
 }
 }  // namespace dragon

@@ -26,7 +26,8 @@ namespace dragon {
  * @param endpoint
  * @return
  */
-boost::asio::awaitable<void> listener(boost::asio::ip::tcp::endpoint endpoint);
+boost::asio::awaitable<void> listener(
+    const boost::asio::ip::tcp::endpoint& endpoint);
 }  // namespace dragon
 
 #endif  // DRAGON_LISTENER_HPP

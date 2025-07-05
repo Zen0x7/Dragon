@@ -13,33 +13,31 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-#ifndef DRAGON_HANDLER_HPP
-#define DRAGON_HANDLER_HPP
+#ifndef DRAGON_CONFIG_HPP
+#define DRAGON_CONFIG_HPP
 
-#include <dragon/handlers/bad_request.hpp>
-#include <dragon/handlers/not_found.hpp>
-
-#include <boost/beast/http/message_generator.hpp>
-#include <boost/beast/http/string_body.hpp>
-#include <boost/json/serialize.hpp>
+#include <string>
 
 namespace dragon {
-using namespace boost::beast::http;
-
 /**
- * Handler
- *
- * @param request
- * @return
+ * Config
  */
-inline message_generator handler(const request<string_body>& request) {
-  if (request.target().empty() || request.target()[0] != '/' ||
-      request.target().find("..") != boost::beast::string_view::npos)
-    return handlers::bad_request(request);
+struct config {
+  /**
+   * Address
+   */
+  std::string address_;
 
-  return handlers::not_found(request);
-}
+  /**
+   * Port
+   */
+  unsigned short port_;
 
+  /**
+   * Threads
+   */
+  int threads_;
+};
 }  // namespace dragon
 
-#endif  // DRAGON_HANDLER_HPP
+#endif  // DRAGON_CONFIG_HPP

@@ -16,17 +16,18 @@
 #ifndef DRAGON_APP_HPP
 #define DRAGON_APP_HPP
 
+#include <dragon/config.hpp>
+
 #include <string>
 
 namespace dragon {
 /**
  * Serve
  *
- * @param argc
- * @param argv
+ * @param config
  * @return
  */
-int serve(int argc, char* argv[]);
+int serve(const config& config);
 
 /**
  * Version

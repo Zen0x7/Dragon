@@ -13,33 +13,32 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-#ifndef DRAGON_HANDLER_HPP
-#define DRAGON_HANDLER_HPP
+#ifndef DRAGON_HANDLERS_BAD_REQUEST_HPP
+#define DRAGON_HANDLERS_BAD_REQUEST_HPP
 
-#include <dragon/handlers/bad_request.hpp>
-#include <dragon/handlers/not_found.hpp>
-
-#include <boost/beast/http/message_generator.hpp>
 #include <boost/beast/http/string_body.hpp>
 #include <boost/json/serialize.hpp>
 
-namespace dragon {
+namespace dragon::handlers {
 using namespace boost::beast::http;
+using namespace boost::json;
 
 /**
- * Handler
+ * Bad request
  *
  * @param request
  * @return
  */
-inline message_generator handler(const request<string_body>& request) {
-  if (request.target().empty() || request.target()[0] != '/' ||
-      request.target().find("..") != boost::beast::string_view::npos)
-    return handlers::bad_request(request);
-
-  return handlers::not_found(request);
+inline response<string_body> bad_request(const request<string_body>& request) {
+  response<string_body> _response{status::bad_request, request.version()};
+  _response.set(field::server, SERVER_NAME);
+  _response.set(field::content_type, "application/json");
+  _response.keep_alive(request.keep_alive());
+  _response.body() = serialize(
+      object({{"status", 400}, {"message", "Resource bad requested"}}));
+  _response.prepare_payload();
+  return _response;
 }
+}  // namespace dragon::handlers
 
-}  // namespace dragon
-
-#endif  // DRAGON_HANDLER_HPP
+#endif  // DRAGON_HANDLERS_BAD_REQUEST_HPP
