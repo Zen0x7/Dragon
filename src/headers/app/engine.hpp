@@ -20,6 +20,9 @@
 #include <string>
 
 namespace app {
+/**
+ * Engine
+ */
 class engine : public std::enable_shared_from_this<engine> {
  public:
   /**
